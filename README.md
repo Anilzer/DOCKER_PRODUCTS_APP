@@ -21,6 +21,8 @@ L’application permet :
 ---
 
 ## Architecture du projet
+
+```text
 mini-app/
 ├── frontend/ # Application React (Create React App)
 ├── backend/ # API Node.js / Express / Mongoose
@@ -29,6 +31,7 @@ mini-app/
 │ └── backend/ # Dockerfile backend
 ├── docker-compose.yml # Orchestration des services
 └── README.md
+```
 
 ---
 ## Services Docker
