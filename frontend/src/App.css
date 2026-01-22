@@ -1,0 +1,100 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 16px;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.form {
+  display: grid;
+  gap: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; 
+}
+
+button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #195624;
+  color: white;
+}
+
+.error {
+  color: #b00020;
+  margin-top: 10px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;           
+  border-top: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.list-item > div:first-child {
+  flex: 1;
+  min-width: 0; 
+}
+
+.muted {
+  color: #666;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere; 
+}
+
+.price {
+  font-weight: bold;
+  white-space: nowrap; 
+}
+
+.right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0; 
+}
+
+.btn-delete {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #ff002f;
+  color: white;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .list-item {
+    flex-wrap: wrap;
+  }
+
+  .right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
