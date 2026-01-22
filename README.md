@@ -89,24 +89,23 @@ docker compose down
 
 Les données MongoDB sont persistantes grâce à un volume Docker : mongo_data:/data/db
 
----
-
-## Un arrêt ou redémarrage des conteneurs ne supprime pas les données.
+Un arrêt ou redémarrage des conteneurs ne supprime pas les données.
 
 
----
 
 ## Développement & Bind Mounts
 
 Les dossiers suivants sont montés en bind mount :
 
+```text
 frontend/
 backend/
+```
 
 ---
 
 
-## ➡️ Toute modification du code est prise en compte sans rebuild des images Docker (hot reload).
+## Toute modification du code est prise en compte sans rebuild des images Docker (hot reload).
 
 ## Tests & validation
 
