@@ -206,7 +206,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -f docker/frontend/Dockerfile \
+            -f docker/frontend/Dockerfile.prod \
             -t tp-frontend:${{ matrix.envname }} \
             .
 
