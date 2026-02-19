@@ -21,6 +21,7 @@ describe("Integration: API <-> MongoDB (products)", () => {
       serverSelectionTimeoutMS: 20000,
     });
   });
+  
 
   afterAll(async () => {
     try {
