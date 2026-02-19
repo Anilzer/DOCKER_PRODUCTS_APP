@@ -5,18 +5,26 @@ const mongoose = require("mongoose");
 const app = require("../../src/app");
 
 describe("Integration: API <-> MongoDB (products)", () => {
+  // ✅ on donne plus de temps au CI
+  jest.setTimeout(30000);
+
   beforeAll(async () => {
     const uri = process.env.MONGO_URI;
     if (!uri) throw new Error("MONGO_URI is required for integration tests");
-    await mongoose.connect(uri);
+
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 20000, // ✅ temps max pour trouver Mongo
+    });
   });
 
   afterAll(async () => {
-    // ✅ évite le crash si la connexion n'a pas été établie
-    if (mongoose.connection.readyState === 1 && mongoose.connection.db) {
-      await mongoose.connection.db.dropDatabase();
+    try {
+      if (mongoose.connection.readyState === 1 && mongoose.connection.db) {
+        await mongoose.connection.db.dropDatabase();
+      }
+    } finally {
+      await mongoose.disconnect();
     }
-    await mongoose.disconnect();
   });
 
   test("POST then GET /api/products", async () => {
@@ -30,9 +38,7 @@ describe("Integration: API <-> MongoDB (products)", () => {
     expect(created.body).toHaveProperty("_id");
     expect(created.body.name).toBe("Orange");
 
-    const list = await request(app)
-      .get("/api/products")
-      .expect(200);
+    const list = await request(app).get("/api/products").expect(200);
 
     expect(Array.isArray(list.body)).toBe(true);
     expect(list.body.length).toBeGreaterThanOrEqual(1);
