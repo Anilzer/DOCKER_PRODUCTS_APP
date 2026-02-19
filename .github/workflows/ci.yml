@@ -134,9 +134,11 @@ jobs:
     strategy:
       matrix:
         envname: [dev, staging, prod]
+
     defaults:
       run:
         working-directory: frontend
+
     steps:
       - uses: actions/checkout@v4
 
@@ -157,15 +159,37 @@ jobs:
           else
             echo "REACT_APP_API_URL=https://prod.example/api" > .env
           fi
-          echo "Building for ${{ matrix.envname }}"
+
+          echo "APP_ENV=${{ matrix.envname }}" >> .env
+
+          echo "===== ENV FILE ====="
           cat .env
 
-      - run: npm run build
+      - name: Build
+        run: npm run build
 
+      # fichier preuve
+      - name: Create build info file
+        run: |
+          echo "env=${{ matrix.envname }}" > build/build-info.txt
+          echo "api_url=$(grep REACT_APP_API_URL .env | cut -d= -f2)" >> build/build-info.txt
+          echo "commit=${GITHUB_SHA}" >> build/build-info.txt
+          echo "date=$(date -u)" >> build/build-info.txt
+          echo "===== BUILD INFO ====="
+          cat build/build-info.txt
+
+      # zip du build
+      - name: Zip build folder
+        run: |
+          cd build
+          zip -r ../frontend-build-${{ matrix.envname }}.zip .
+          cd ..
+          ls -lh frontend-build-${{ matrix.envname }}.zip
+
+      # upload du zip comme artefact (téléchargeable)
       - uses: actions/upload-artifact@v4
         with:
           name: frontend-build-${{ matrix.envname }}
-          path: frontend/build/
+          path: frontend/frontend-build-${{ matrix.envname }}.zip
           retention-days: 5
-
 
