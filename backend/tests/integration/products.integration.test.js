@@ -1,19 +1,24 @@
-require("dotenv").config();
+// ✅ Ne charge .env que si MONGO_URI n'est pas déjà fourni (CI)
+if (!process.env.MONGO_URI) {
+  require("dotenv").config();
+}
 
 const request = require("supertest");
 const mongoose = require("mongoose");
 const app = require("../../src/app");
 
 describe("Integration: API <-> MongoDB (products)", () => {
-  // ✅ on donne plus de temps au CI
   jest.setTimeout(30000);
 
   beforeAll(async () => {
     const uri = process.env.MONGO_URI;
     if (!uri) throw new Error("MONGO_URI is required for integration tests");
 
-    await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 20000, // ✅ temps max pour trouver Mongo
+    // ✅ force IPv4 et évite localhost/::1
+    const safeUri = uri.replace("localhost", "127.0.0.1");
+
+    await mongoose.connect(safeUri, {
+      serverSelectionTimeoutMS: 20000,
     });
   });
 
