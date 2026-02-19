@@ -192,4 +192,34 @@ jobs:
           name: frontend-build-${{ matrix.envname }}
           path: frontend/frontend-build-${{ matrix.envname }}.zip
           retention-days: 5
+  docker-image-frontend:
+    name: Docker image frontend (.tar artifact)
+    runs-on: ubuntu-latest
+    needs: [unit-frontend]
+    strategy:
+      matrix:
+        envname: [dev, staging, prod]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f docker/frontend/Dockerfile \
+            -t tp-frontend:${{ matrix.envname }} \
+            .
+
+      - name: Save image as tar
+        run: |
+          docker save tp-frontend:${{ matrix.envname }} -o tp-frontend-${{ matrix.envname }}.tar
+          ls -lh tp-frontend-${{ matrix.envname }}.tar
+
+      - name: Upload tar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-frontend-${{ matrix.envname }}
+          path: tp-frontend-${{ matrix.envname }}.tar
+          retention-days: 5
+
 
