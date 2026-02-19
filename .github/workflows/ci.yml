@@ -26,6 +26,12 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Show variable (allowed)
+        run: echo "APP_ENV=${{ vars.APP_ENV }}"
+
+      - name: Show secret (masked)
+        run: echo "DUMMY_SECRET=${{ secrets.DUMMY_SECRET }}"
+        
       - name: Run unit tests
         run: npm test
 
