@@ -1,4 +1,4 @@
-# Mini-app CRUD – Gestion de produits  
+<!-- # Mini-app CRUD – Gestion de produits  
 **React · Node.js · Express · MongoDB · Docker**
 
 ---
@@ -117,4 +117,153 @@ Les données sont visibles via mongo-express et MongoDB Compass
 
 Les données persistent après redémarrage des conteneurs
 
-Le code est modifiable à chaud grâce aux bind mounts
+Le code est modifiable à chaud grâce aux bind mounts -->
+
+# 🚀 DOCKER_PRODUCTS_APP
+
+Mini-application CRUD de gestion de produits  
+Stack : **React + Node.js + MongoDB + Docker + GitHub Actions (CI/CD)**
+
+---
+
+# Lancer le projet en local
+
+## Cloner le projet
+
+```bash
+git clone https://github.com/Anilzer/DOCKER_PRODUCTS_APP.git
+cd DOCKER_PRODUCTS_APP
+```
+
+---
+
+## Lancer avec Docker
+
+```bash
+docker compose up --build
+```
+
+---
+## Accéder aux services
+
+Frontend → http://localhost:3000
+
+Backend → http://localhost:5000/health
+
+Mongo UI → http://localhost:8081
+
+## 🔐 Variables nécessaires
+
+```text
+Backend (.env en local)
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/tp_docker
+En Docker, ces variables sont injectées automatiquement via docker-compose.yml.
+
+Variables CI/CD (GitHub Actions)
+APP_ENV → variable non sensible (visible dans les logs)
+
+DUMMY_SECRET → secret masqué automatiquement dans les logs
+```
+
+## ⚙️ Déroulement du pipeline CI
+Le pipeline GitHub Actions se déclenche automatiquement sur :
+
+```text
+push
+
+pull_request
+```
+
+Étapes exécutées :
+
+1️- Unit Tests
+```text
+Backend (Jest)
+
+Frontend (React Testing Library)
+
+Exécutés en parallèle
+```
+
+2️- Integration Tests
+```text
+Lancement automatique d’un service MongoDB
+
+Test API ↔ Base de données (Supertest + Mongoose)
+```
+
+3️- Artefacts
+```text
+Génération d’un artefact test-results
+
+Réutilisation par un autre job
+
+Téléchargeable depuis l’interface GitHub
+
+Durée de conservation définie
+```
+
+4️- Build multi-environnement
+
+```text
+Build React pour :
+
+dev
+
+staging
+
+prod
+
+Génération d’artefacts distincts par environnement
+```
+
+5️- Image Docker du Frontend
+```text
+Construction d’une image Docker du build React
+
+Export en fichier .Zip
+
+Upload comme artifact téléchargeable
+```
+6️- Self-hosted Runner
+```text
+Un job spécifique s’exécute sur un runner local Windows
+
+Exécution uniquement sur push (sécurité repo public)
+```
+
+## 🐳 Tester une image Docker exportée
+
+```bash
+docker load -i tp-frontend-prod.tar
+docker run --rm -p 8080:80 tp-frontend:prod
+```
+
+```text
+Puis ouvrir :
+
+http://localhost:8080
+```
+
+## Fonctionnalités couvertes
+
+```text
+-CI automatique
+
+-Tests unitaires
+
+-Tests d’intégration
+
+-Variables & secrets
+
+-Artefacts réutilisables
+
+-Jobs parallèles
+
+-Build multi-environnement
+
+-Image Docker générée
+
+-Runner local
+```
