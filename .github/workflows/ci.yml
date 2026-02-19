@@ -69,3 +69,10 @@ jobs:
 
       - name: Run integration tests
         run: npm run test:integration
+  self-hosted-proof:
+    name: Proof job on self-hosted runner
+    runs-on: self-hosted
+    needs: unit-tests
+    steps:
+      - run: echo Running on self-hosted runner
+      - run: echo Runner name is %RUNNER_NAME%
