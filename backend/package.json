@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns=tests/integration",
     "dev": "nodemon --legacy-watch src/server.js",
     "start": "node src/server.js",
-    "test:integration": "jest --testPathPatterns=integration --runInBand"
+    "test:integration": "jest tests/integration --runInBand"
   },
   "keywords": [],
   "author": "",
