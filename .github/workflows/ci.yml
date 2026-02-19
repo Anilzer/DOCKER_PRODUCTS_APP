@@ -105,12 +105,14 @@ jobs:
         run: npm run test:integration
 
   self-hosted-proof:
+    if: github.event_name == 'push'
     name: Proof job on self-hosted runner
     runs-on: self-hosted
     needs: unit-tests
     steps:
-      - run: echo Running on self-hosted runner
-      - run: echo Runner name is %RUNNER_NAME%
+      - run: echo "Runner name is $env:RUNNER_NAME"
+        shell: powershell
+
 
   analyze-artifact:
     name: Reuse artifact
