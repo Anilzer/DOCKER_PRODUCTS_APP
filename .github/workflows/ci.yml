@@ -31,9 +31,22 @@ jobs:
 
       - name: Show secret (masked)
         run: echo "DUMMY_SECRET=${{ secrets.DUMMY_SECRET }}"
-        
+
       - name: Run unit tests
         run: npm test
+      
+      - name: Create test artifact
+        run: |
+          mkdir -p test-results
+          echo "Unit tests OK - $(date)" > test-results/unit.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: backend/test-results/
+          retention-days: 5
+
 
   integration-tests:
     name: Integration tests (API <-> Mongo)
@@ -75,6 +88,7 @@ jobs:
 
       - name: Run integration tests
         run: npm run test:integration
+        
   self-hosted-proof:
     name: Proof job on self-hosted runner
     runs-on: self-hosted
@@ -82,3 +96,17 @@ jobs:
     steps:
       - run: echo Running on self-hosted runner
       - run: echo Runner name is %RUNNER_NAME%
+
+  analyze-artifact:
+    name: Reuse artifact
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: test-results
+          path: downloaded
+
+      - name: Read artifact content
+        run: cat downloaded/unit.txt
+
